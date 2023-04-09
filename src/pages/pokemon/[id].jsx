@@ -1,10 +1,20 @@
 import { pokeApi } from "@/api";
 import { Layout } from "@/components/layouts";
+import { localFavorites } from "@/utils";
 import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
+import { useState } from "react";
 
 const PokemonPage = ({ pokemon }) => {
+
+  const [ isInFavorites, setIsInFavorites ] = useState(localFavorites.existInFavorites(pokemon.id));
+
+  const onToggleFavorite = () => {
+    localFavorites.toggleFavorite(pokemon.id);
+    setIsInFavorites( !isInFavorites );
+  }
+
   return (
-    <Layout title="Algun pokémon">
+    <Layout title={ pokemon.name }>
       <Grid.Container css={{ marginTop: "5px" }} gap={2}>
         <Grid xs={ 12 } sm={ 4 }>
           <Card isHoverable css={{ padding: '30px'}}>
@@ -24,8 +34,11 @@ const PokemonPage = ({ pokemon }) => {
               <Text h1 transform="capitalize"> { pokemon.name } </Text>
               <Button 
                 color="gradient"
-                ghost
-              > Add to favorites </Button>
+                ghost = { !isInFavorites }
+                onPress={onToggleFavorite}
+              > 
+                { isInFavorites ? 'In favorites' : 'Add to favorites'} 
+              </Button>
             </Card.Header>
             <Card.Body>
               <Text size={30}> Sprites: </Text>
