@@ -2,7 +2,6 @@ import { Layout } from "@/components/layouts";
 import { FavoritePokemons } from "@/components/pokemon";
 import { NoFavorites } from "@/components/ui";
 import { localFavorites } from "@/utils";
-import { Card, Grid } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
 

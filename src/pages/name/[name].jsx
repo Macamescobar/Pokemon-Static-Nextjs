@@ -5,7 +5,7 @@ import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
 import { useState } from "react";
 import confetti from 'canvas-confetti';
 
-const PokemonPage = ({ pokemon }) => {
+const PokemonByNamePage = ({ pokemon }) => {
 
   const [ isInFavorites, setIsInFavorites ] = useState(localFavorites.existInFavorites(pokemon.id));
 
@@ -93,21 +93,22 @@ const PokemonPage = ({ pokemon }) => {
 
 
 export async function getStaticPaths() {
-  const pokemons151 = [...Array(151)].map((value, index) => `${index + 1}`);
   
+    const { data } = await pokeApi.get('/pokemon?limit=151');
+    const pokemonNames = data.results.map(pokemon => pokemon.name );
 
   return {
-    paths: pokemons151.map((id) => ({
-      params: { id },
+    paths: pokemonNames.map( name => ({
+      params: { name},
     })),
     fallback: false, // can also be true or 'blocking'
   };
 }
 
 export const getStaticProps = async ({ params }) => {
-  const { id } = params;
+  const { name } = params;
 
-  const { data } = await pokeApi.get(`pokemon/${id}`);
+  const { data } = await pokeApi.get(`pokemon/${name}`);
 
   return {
     props: {
@@ -116,4 +117,4 @@ export const getStaticProps = async ({ params }) => {
   };
 };
 
-export default PokemonPage;
+export default PokemonByNamePage;
